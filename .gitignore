@@ -117,3 +117,8 @@ runs/
 
 # Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
 !gradle-wrapper.jar
+
+webeditor/node_modules/
+webeditor/.vite/
+webeditor/dist/
+webeditor/.idea/
