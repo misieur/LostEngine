@@ -97,7 +97,7 @@ tasks.shadowJar {
     archiveClassifier.set("")
     exclude 'com/google/**'
     exclude 'it/unimi/dsi/fastutil/**'
-    exclude 'org.apache.commons'
+    exclude 'org/apache/commons/**'
     minimize()
     from("LICENSE.MD") {
         into("META-INF")
