@@ -2,7 +2,6 @@ package dev.lost.furnace.utils;
 
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry;
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream;
-import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,6 +12,7 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -86,7 +86,7 @@ public class PngOptimizer {
                 }
             }
         } else {
-            try (TarArchiveInputStream tar = new TarArchiveInputStream(new GzipCompressorInputStream(Files.newInputStream(tmp)))) {
+            try (TarArchiveInputStream tar = new TarArchiveInputStream(new GZIPInputStream(Files.newInputStream(tmp)))) {
                 TarArchiveEntry tarArchiveEntry;
                 while ((tarArchiveEntry = tar.getNextEntry()) != null) {
                     if (tarArchiveEntry.getName().endsWith(wanted)) {

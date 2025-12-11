@@ -97,8 +97,7 @@ tasks.shadowJar {
     archiveClassifier.set("")
     exclude 'com/google/**'
     exclude 'it/unimi/dsi/fastutil/**'
-    relocate 'org.apache', 'dev.lost.libs.apache'
-    // TODO: Remove apache commons
+    exclude 'org.apache.commons'
     minimize()
     from("LICENSE.MD") {
         into("META-INF")
