@@ -22,7 +22,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
-@CanBreakOnUpdates(lastCheckedVersion = "1.21.10") // Make sure the field names are still correct on new Minecraft versions
+@CanBreakOnUpdates(lastCheckedVersion = "1.21.11") // Make sure the field names are still correct on new Minecraft versions
 public class ReflectionUtils {
 
     private static final Field STATES_FIELD;

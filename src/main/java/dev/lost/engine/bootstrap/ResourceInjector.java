@@ -14,7 +14,7 @@ import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
@@ -32,7 +32,7 @@ import java.util.Map;
 @SuppressWarnings("UnstableApiUsage")
 public class ResourceInjector {
 
-    @CanBreakOnUpdates(lastCheckedVersion = "1.21.10") // If there is a new Material
+    @CanBreakOnUpdates(lastCheckedVersion = "1.21.11") // If there is a new Material
     static Map<String, ToolMaterial> toolMaterials = new Object2ObjectOpenHashMap<>();
     static List<ComponentProperty> propertyClassInstances = List.of(
             new EnchantmentGlintOverrideProperty(),
@@ -87,7 +87,7 @@ public class ResourceInjector {
             float attackDamageBonus = (float) materialSection.getDouble("attack_damage_bonus", 0.0);
             int enchantmentValue = materialSection.getInt("enchantment_value", 15);
             String repairItem = materialSection.getString("repair_item", null);
-            TagKey<Item> repairItems = TagKey.create(Registries.ITEM, ResourceLocation.parse(key.toLowerCase() + "_tool_materials"));
+            TagKey<Item> repairItems = TagKey.create(Registries.ITEM, Identifier.parse(key.toLowerCase() + "_tool_materials"));
             dataPackGenerator.addToolMaterial(repairItems.location().getPath(), repairItem);
             ToolMaterial baseMaterial = getOrThrow(toolMaterials, base, "Invalid base material: " + base);
 
@@ -202,15 +202,12 @@ public class ResourceInjector {
             ConfigurationSection componentPropertySection = componentsSection.getConfigurationSection(key);
 
             if (componentPropertySection == null) continue;
-            try {
-                fillParameters(context, componentProperty, componentPropertySection, itemSection.getName());
+            if (fillParameters(context, componentProperty, componentPropertySection, itemSection.getName()))
                 componentProperty.applyComponent(context, componentPropertySection, itemSection.getName(), components);
-            } catch (Exception ignored) {
-            }
         }
     }
 
-    private static void fillParameters(@NotNull BootstrapContext context, @NotNull ComponentProperty componentProperty, @NotNull ConfigurationSection section, @NotNull String name) throws RuntimeException {
+    private static boolean fillParameters(@NotNull BootstrapContext context, @NotNull ComponentProperty componentProperty, @NotNull ConfigurationSection section, @NotNull String name) throws RuntimeException {
         for (Field field : componentProperty.getClass().getDeclaredFields()) {
             Parameter parameter = field.getAnnotation(Parameter.class);
             if (parameter == null)
@@ -229,17 +226,17 @@ public class ResourceInjector {
                     // if not, reset the field's value
                     field.set(componentProperty, null);
                     if (value != null) {
-                        // if the value is the wrong type, tell the user and if it is required, throw an exception
+                        // if the value is the wrong type, tell the user and if it is required, return false
                         context.getLogger().warn("Invalid type for parameter '{}'. Expected {}, got {} for item {}", parameter.key(), parameter.type().getSimpleName(), value.getClass().getSimpleName(), name);
                         if (parameter.required()) {
                             context.getLogger().warn("This parameter is required, can't create component");
-                            throw new RuntimeException("Required parameter is missing");
+                            return false;
                         }
                     } else {
-                        // if the value is null and required, throw an exception
+                        // if the value is null and required, return false
                         if (parameter.required()) {
                             context.getLogger().warn("Missing required parameters for field {} on ComponentProperty: {}", field.getName(), parameter.key());
-                            throw new RuntimeException("Required parameter is missing");
+                            return false;
                         }
                     }
 
@@ -248,8 +245,10 @@ public class ResourceInjector {
                 context.getLogger().error("Failed to inject value for field: {}", field.getName(), e);
                 // We can stop the server if this happens it would generate too many exceptions
                 LostEngineBootstrap.stopServer(context);
+                return false; // return false will never be executed ;(
             }
         }
+        return true;
     }
 
     private static @Nullable Object convertNumberType(@Nullable Object value, @Nullable Class<?> targetType) {
