@@ -1,0 +1,29 @@
+## TODO:
+- [ ] Custom Items
+    - [X] Regular Items
+    - [X] Tools
+    - [X] Armors
+    - [ ] Elytra
+    - [ ] Trident
+- [ ] Custom Blocks
+    - [X] Dynamic block hardness
+    - [X] Drops/Required tool
+    - [ ] Custom sounds
+    - [ ] Transparent blocks
+    - [ ] Lights/Redstone
+- [ ] Web editor
+    - [X] Upload/Download/Create files
+    - [X] View/Edit files
+    - [ ] Config editor
+        - [X] View items/materials
+        - [ ] Create/manage items/materials
+- [ ] Fournitures
+    - [ ] Fourniture Entity
+    - [ ] Interactable Fournitures
+- [ ] Bedrock compatibility
+    - [ ] Items
+        - [X] Regular items
+        - [X] Tools
+        - [ ] Armor/Elytra/Trident
+    - [ ] Translations
+    - [ ] Custom blocks
