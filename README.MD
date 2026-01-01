@@ -27,3 +27,8 @@
         - [ ] Armor/Elytra/Trident
     - [ ] Translations
     - [ ] Custom blocks
+- [ ] Commands
+  - [X] `/give`
+  - [X] `/setblock`
+  - [ ] `/fill`
+  - [ ] `/summon` (for fournitures)
