@@ -25,7 +25,7 @@
         - [X] Regular items
         - [X] Tools
         - [ ] Armor/Elytra/Trident
-    - [ ] Translations
+    - [ ] Translations (generated but not working correctly with geyser)
     - [ ] Custom blocks
 - [ ] Commands
   - [X] `/give`
