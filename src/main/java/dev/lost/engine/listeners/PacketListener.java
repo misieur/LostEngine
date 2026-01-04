@@ -495,7 +495,7 @@ public class PacketListener {
             }
         }
         if (item.getItem() instanceof CustomItem customItem) {
-            ItemStack newItem = dynamicMaterial ? customItem.getDynamicMaterial().copy() : Items.FILLED_MAP.getDefaultInstance();
+            ItemStack newItem = dynamicMaterial ? customItem.getDynamicMaterial() : customItem.getDefaultMaterial();
             newItem.setCount(item.getCount());
             newItem.applyComponents(item.getComponents());
             ItemUtils.addCustomStringData(newItem, "lost_engine_id", customItem.getId());

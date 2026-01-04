@@ -205,6 +205,12 @@ public class ResourceInjector {
                         ItemInjector.injectArmor(key, material, armorType, dataPackGenerator, components);
                     }
 
+                    case "elytra" -> {
+                        int durability = itemSection.getInt("elytra.durability", 432);
+                        String repairItem = itemSection.getString("elytra.repair_item", null);
+                        ItemInjector.injectElytra(key, repairItem, durability, components);
+                    }
+
                     default -> context.getLogger().warn("Unknown item type: {} for item: {}", type, key);
                 }
             } catch (Exception e) {
